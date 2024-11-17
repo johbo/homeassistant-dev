@@ -15,10 +15,14 @@ outputs = { self, nixpkgs, flake-utils, ... }:
         overlays = [];
       };
       pythonEnv = pkgs.python312.withPackages (ps: with ps; [
+        numpy
+        pip
 
-        ps.pip
-        ps.numpy
-
+        # TODO: Adding these ensures that the needed dependencies are available.
+        # It would be nicer to add only the dependencies so that there is no
+        # chance to have the Python libraries mixed up.
+        opuslib
+        pyturbojpeg
       ]);
     in
     {
@@ -28,17 +32,17 @@ outputs = { self, nixpkgs, flake-utils, ... }:
           pkgs.uv
         ];
         shellHook = ''
-          # Save the current value of the SHELL variable
-          original_shell=$SHELL
+          # # Save the current value of the SHELL variable
+          # original_shell=$SHELL
 
-          ./script/setup
+          # ./script/setup
 
-          # Switch back to the original shell
-          if [ -x "$original_shell" ]; then
-            exec "$original_shell"
-          fi
+          # # Switch back to the original shell
+          # if [ -x "$original_shell" ]; then
+          #   exec "$original_shell"
+          # fi
 
-          source venv/bin/activate
+          # source venv/bin/activate
         '';
         };
     });
