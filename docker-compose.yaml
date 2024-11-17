@@ -1,0 +1,45 @@
+# Source: https://community.home-assistant.io/t/run-whisper-on-external-server/567449/32
+
+# Aims to run Whisper, Piper and openWakeWord so that they can be used together
+# with the devcontainer of Home Assistant.
+
+version: "3"
+services:
+
+  whisper: # stt
+    container_name: whisper
+    command: --model small-int8 --language de
+    image: rhasspy/wyoming-whisper:latest
+    volumes:
+      - ./data/whisper:/data
+    environment:
+      - TZ=Europe/Berlin
+    restart: unless-stopped
+    ports:
+      - 10300:10300
+
+  piper: # tts
+    container_name: piper
+    image: rhasspy/wyoming-piper:latest
+    command: --voice de_DE-eva_k-x_low
+    volumes:
+      - ./data/piper:/data
+    environment:
+      - TZ=Europe/Berlin
+    restart: unless-stopped
+    ports:
+      - 10200:10200
+
+  openwakeword:
+    container_name: openwakeword
+    image: rhasspy/wyoming-openwakeword:latest
+    command:
+      --preload-model 'ok_nabu'
+      --uri 'tcp://0.0.0.0:10400'
+    volumes:
+      - ./data/openwakeword:/data
+    environment:
+      - TZ=Europe/Berlin
+    restart: unless-stopped
+    ports:
+      - 10400:10400
