@@ -6,7 +6,8 @@
 version: "3"
 services:
 
-  whisper: # stt
+  # Speech to Text
+  whisper:
     container_name: whisper
     command: --model small-int8 --language de
     image: rhasspy/wyoming-whisper:latest
@@ -18,7 +19,8 @@ services:
     ports:
       - 10300:10300
 
-  piper: # tts
+  # Text to Speech
+  piper:
     container_name: piper
     image: rhasspy/wyoming-piper:latest
     command: --voice de_DE-eva_k-x_low
@@ -30,6 +32,7 @@ services:
     ports:
       - 10200:10200
 
+  # Wakeword detection
   openwakeword:
     container_name: openwakeword
     image: rhasspy/wyoming-openwakeword:latest
