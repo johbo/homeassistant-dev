@@ -14,14 +14,13 @@ outputs = { self, nixpkgs, flake-utils, ... }:
         inherit system;
         overlays = [];
       };
-      pythonEnv = pkgs.python312.withPackages (ps: with ps; [
+      pythonEnv = pkgs.python313.withPackages (ps: with ps; [
         numpy
         pip
 
         # TODO: Adding these ensures that the needed dependencies are available.
         # It would be nicer to add only the dependencies so that there is no
         # chance to have the Python libraries mixed up.
-        opuslib
         pyturbojpeg
       ]);
     in
@@ -29,12 +28,13 @@ outputs = { self, nixpkgs, flake-utils, ... }:
       devShell = pkgs.mkShell {
         buildInputs = [
           pythonEnv
-          pkgs.uv
+          # pkgs.uv
         ];
         shellHook = ''
+          export DYLD_LIBRARY_PATH=${pkgs.libopus}/lib
+
           # # Save the current value of the SHELL variable
           # original_shell=$SHELL
-
           # ./script/setup
 
           # # Switch back to the original shell
