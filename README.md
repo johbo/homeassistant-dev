@@ -63,4 +63,25 @@ locally:
 - <https://developers.home-assistant.io/docs/development_environment#setup-local-repository>
 
 
+### Configuration in Home Assistant for VoIP
 
+- Integration: VoIP
+  - Port: `5060`
+- Integration: Wyoming
+  - `faster-whisper`
+    - Host: `localhost`
+    - Port: `10300`
+  - `piper`
+    - Host: `localhost`
+    - Port: `10200`
+  - `openwakeword`
+    - Host: `localhost`
+    - Port: `10400`
+
+Configure the assistant to use the components which have been added above.
+
+Make a call from the SIP Phone to Home Assistant: `sip:127.0.0.1:5060`. Adjust
+the IP when calling from a different machine or device. Then adjust the
+configuration of the phone to allow it to make calls.
+
+Calling again should now trigger the voice prompt.
