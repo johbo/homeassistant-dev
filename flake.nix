@@ -17,11 +17,6 @@ outputs = { self, nixpkgs, flake-utils, ... }:
       pythonEnv = pkgs.python313.withPackages (ps: with ps; [
         numpy
         pip
-
-        # TODO: Adding these ensures that the needed dependencies are available.
-        # It would be nicer to add only the dependencies so that there is no
-        # chance to have the Python libraries mixed up.
-        pyturbojpeg
       ]);
     in
     {
@@ -31,7 +26,8 @@ outputs = { self, nixpkgs, flake-utils, ... }:
           # pkgs.uv
         ];
         shellHook = ''
-          export DYLD_LIBRARY_PATH=${pkgs.libopus}/lib
+          # TODO: Find a better way to provide these
+          export DYLD_LIBRARY_PATH=${pkgs.libopus}/lib:${pkgs.lib.getLib pkgs.libjpeg_turbo}/lib
 
           # # Save the current value of the SHELL variable
           # original_shell=$SHELL
